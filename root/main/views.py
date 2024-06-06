@@ -5,6 +5,10 @@ from .forms import *
 # Create your views here.
 
 
+def loginpage(request):
+    context = {}
+    return render(request,'main/login_register.html',context)
+
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else '' # 'q' only if it contains something else empty
     rooms = Room.objects.filter(
