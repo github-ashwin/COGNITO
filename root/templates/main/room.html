@@ -4,4 +4,28 @@
     
         <h1>{{room.id}} - {{room.name}} - {{room.host}}</h1>
 
+        <p>{{room.description}}</p>
+
+
+        <div class="comment-wrapper">
+            <h3>Conversation</h3>
+            <hr>
+            {% for message in room_messages %}
+                <div>
+                    <small>@{{message.user.username}}  {{message.created|timesince}}ago </small>
+                    <p>{{message.body}}</p>
+                    <br>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="comment-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Type your message here..."/>
+            </form>
+        </div>
+        {% endif %}
+
     {% endblock content %}
