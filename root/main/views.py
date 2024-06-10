@@ -67,14 +67,16 @@ def home(request):
         Q(description__icontains=q)) # icontains is case insensitive
     topics = Topic.objects.all()
     room_count = rooms.count()
-    context = {'rooms':rooms,'topics':topics,'room_count':room_count}
+
+    room_messages = Message.objects.all()
+    context = {'rooms':rooms,'topics':topics,'room_count':room_count,'room_messages':room_messages}
     return render(request,'main/home.html',context)
 
 
 @login_required(login_url='login')
 def room(request, pk):
     room = get_object_or_404(Room, id=pk)
-    room_messages = room.message_set.all().order_by('-created')
+    room_messages = room.message_set.all()
     participants = room.participants.all()
 
     if request.method == 'POST':
