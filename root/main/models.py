@@ -1,46 +1,39 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
-
+# Topic model to categorize rooms
 class Topic(models.Model):
     name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
-    
 
+# Room model representing a discussion room
 class Room(models.Model):
-    host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
-    name = models.CharField(max_length=200)
-    description = models.TextField(null=True, blank=True)
-    participants = models.ManyToManyField(User, related_name='participants', blank=True) # We have referrd User above so we can't do it again, so provide related_name
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
-
+    host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  # Host user, nullable
+    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)  # Topic, nullable
+    name = models.CharField(max_length=200)  # Room name
+    description = models.TextField(null=True, blank=True)  # Room description, optional
+    participants = models.ManyToManyField(User, related_name='participants', blank=True)  # Room participants, optional
+    updated = models.DateTimeField(auto_now=True)  # Timestamp of the last update
+    created = models.DateTimeField(auto_now_add=True)  # Timestamp of creation
 
     class Meta:
-        ordering = ['-updated','-created']  # last updated Room is listed first
+        ordering = ['-updated', '-created']  # Order by last updated and created date
 
     def __str__(self):
         return self.name
-    
 
+# Message model representing a message in a room
 class Message(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    body = models.TextField()
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # User who posted the message
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)  # Room where the message was posted
+    body = models.TextField()  # Message content
+    updated = models.DateTimeField(auto_now=True)  # Timestamp of the last update
+    created = models.DateTimeField(auto_now_add=True)  # Timestamp of creation
 
     class Meta:
-        ordering = ['-updated','-created']  # last updated Room is listed first
+        ordering = ['-updated', '-created']  # Order by last updated and created date
 
     def __str__(self):
-        return self.body[0:50]
-    
-
-
-   
+        return self.body[:50]  # Return first 50 characters of the message body
