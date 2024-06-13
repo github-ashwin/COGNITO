@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+    <!-- Form for confirming deletion -->
     <form method="POST" action="">
+        <!-- CSRF token for security -->
         {% csrf_token %}
-        <p>Are you sure you want to delete "{{obj}}"?</p>
-        <a href="{{request.META.HTTP_REFERER}}">Go back</a>
+        
+        <!-- Confirmation message -->
+        <p>Are you sure you want to delete "{{ obj }}"?</p>
+        
+        <!-- Link to go back to the previous page -->
+        <a href="{{ request.META.HTTP_REFERER }}">Go back</a>
+        
+        <!-- Submit button to confirm deletion -->
         <input type="submit" value="Confirm" />
     </form>
-
 {% endblock content %}

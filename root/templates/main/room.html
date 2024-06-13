@@ -1,75 +1,87 @@
 {% extends "base.html" %}
 
-    {% block content %}
+{% block content %}
 
-    <style>
-        .room-container{
-            display:grid;
-            grid-template-columns:3fr 1fr;
-        }
-    </style>
-    <div class="room-container">
-        <div>
-        <h1>{{room.id}} - {{room.name}} - {{room.host}}</h1>
+<!-- CSS styling for the room container -->
+<style>
+    .room-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
 
-        <p>{{room.description}}</p>
+<!-- Room container with a grid layout -->
+<div class="room-container">
+    <!-- Main content area -->
+    <div>
+        <!-- Room details -->
+        <h1>{{ room.id }} - {{ room.name }} - {{ room.host }}</h1>
+        <p>{{ room.description }}</p>
 
-
+        <!-- Conversation section -->
         <div class="comment-wrapper">
             <h3>Conversation</h3>
             <hr>
+            <!-- Loop through room messages -->
             {% for message in room_messages %}
                 <div>
+                    <!-- Edit and delete options for the message owner -->
                     {% if request.user == message.user %}
                         <button onclick="editMessage({{ message.id }}, '{{ message.body|escapejs }}')">Edit</button>
-                        <a href="{% url "delete_message" message.id %}">Delete</a>
+                        <a href="{% url 'delete_message' message.id %}">Delete</a>
                     {% endif %}
-                    <small>@{{message.user.username}}  {{message.created|timesince}}ago </small>
-                    <p>{{message.body}}</p>
+                    <!-- Display message details -->
+                    <small>@{{ message.user.username }} {{ message.created|timesince }} ago </small>
+                    <p>{{ message.body }}</p>
                     <hr>
                 </div>
             {% endfor %}
         </div>
 
+        <!-- Message form for authenticated users -->
         {% if request.user.is_authenticated %}
         <div class="comment-form">
-            <form method="POST" action="">
+            <form method="POST" action="" id="comment-form">
                 {% csrf_token %}
-                <!-- Hidden field to store message ID for editting-->
+                <!-- Hidden field to store message ID for editing -->
                 <input type="hidden" name="message_id" id="message_id" value="">
                 <!-- Text field for the message body -->
-                <input type="text" name="body" id="message_body" placeholder="Type your message here..." />
+                <input type="text" name="body" id="message_body" placeholder="Type your message here..." onkeypress="handleKeyPress(event)" />
             </form>
         </div>
         {% endif %}
     </div>
+
+    <!-- Participants section -->
     <div>
         <h3>Participants</h3>
         <hr>
+        <!-- Loop through participants -->
         {% for participant in participants %}
         <div>
-            <p>@{{participant.username}}</p>
+            <p>@{{ participant.username }}</p>
         </div>
         {% endfor %}
     </div>
-    </div>
+</div>
 
+<!-- JavaScript for handling message editing and form submission -->
+<script>
+    function editMessage(messageId, messageBody) {
+        // Set the message ID and body to the input fields
+        document.getElementById('message_id').value = messageId;
+        document.getElementById('message_body').value = messageBody;
+        
+        // Focus on the input field
+        document.getElementById('message_body').focus();
+    }
+    
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();  // Prevent the default form submission
+            document.getElementById('comment-form').submit();  // Programmatically submit the form
+        }
+    }
+</script>
 
-    <script>
-        function editMessage(messageId, messageBody) {
-            // Set the message ID and body to the input fields
-            document.getElementById('message_id').value = messageId;
-            document.getElementById('message_body').value = messageBody;
-        
-            // Focus on the input field
-            document.getElementById('message_body').focus();
-        }
-        
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();  // Prevent the default form submission
-                document.getElementById('comment-form').submit();  // Programmatically submit the form
-            }
-        }
-    </script>
-    {% endblock content %}
+{% endblock content %}

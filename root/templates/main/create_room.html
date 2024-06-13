@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    <!-- Form container -->
     <div>
+        <!-- Form for submitting data -->
         <form method="POST" action="">
+            <!-- CSRF token for security -->
             {% csrf_token %}
-            {{form.as_p}}
+            <!-- Render form fields -->
+            {{ form.as_p }}
+            <!-- Submit button -->
             <input type="submit" value="Submit" />
         </form>
     </div>
-
 {% endblock content %}

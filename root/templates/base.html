@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="">
 </head>
 <body>
+    <!-- Include the navigation bar -->
     {% include 'navbar.html' %}
+
+    <!-- Display messages if any -->
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -16,6 +19,7 @@
         </ul>
     {% endif %}
 
+    <!-- Block for page-specific content -->
     {% block content %}
     {% endblock content %}
 </body>

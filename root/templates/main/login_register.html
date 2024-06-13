@@ -2,33 +2,44 @@
 
 {% block content %}
 
+<!-- Check if the page is the login page -->
 {% if page == 'login' %}
 
+<!-- Login Form -->
 <div>
     <form method="POST" action="">
         {% csrf_token %}
-        <label>Username:</label>
+        <!-- Username Input -->
+        <label for="username">Username:</label>
         <input type="text" name="username" id="username" placeholder="Enter Username" />
 
-        <label>Password:</label>
+        <!-- Password Input -->
+        <label for="password">Password:</label>
         <input type="password" name="password" id="password" placeholder="Enter Password" />
 
+        <!-- Submit Button -->
         <input type="submit" value="Login" />
     </form>
-    <p>Haven't Signed Yet?</p>
-    <a href="{% url "register" %}">Sign Up</a>
+    <!-- Sign Up Link -->
+    <p>Haven't Signed Up Yet?</p>
+    <a href="{% url 'register' %}">Sign Up</a>
 </div>
 
+<!-- Check if the page is the register page -->
 {% else %}
 
+<!-- Register Form -->
 <div>
     <form method="POST" action="">
         {% csrf_token %}
-        {{form.as_p}}
+        <!-- Render the registration form fields -->
+        {{ form.as_p }}
+        <!-- Submit Button -->
         <input type="submit" value="Register" />
     </form>
+    <!-- Login Link -->
     <p>Already Signed Up?</p>
-    <a href="{% url "login" %}">Login</a>
+    <a href="{% url 'login' %}">Login</a>
 </div>
 
 {% endif %}
