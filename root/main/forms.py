@@ -9,6 +9,7 @@ class RoomForm(ModelForm):
     class Meta:
         model = Room
         fields = '__all__'  # Include all fields from the Room model
+        exclude = ['host','participants'] # Excluding fields from the form
 
 
 # Custom user creation form extending the default UserCreationForm

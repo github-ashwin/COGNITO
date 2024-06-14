@@ -1,16 +1,19 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COGNITO</title>
-    <link rel="stylesheet" href="">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+    <title>Cognito</title>
+  </head>
+
+  <body>
     <!-- Include the navigation bar -->
     {% include 'navbar.html' %}
 
-    <!-- Display messages if any -->
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -19,8 +22,9 @@
         </ul>
     {% endif %}
 
-    <!-- Block for page-specific content -->
     {% block content %}
     {% endblock content %}
-</body>
+
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
 </html>
