@@ -19,8 +19,9 @@
               <h3>Study Room</h3>
             </div>
 
+            {% if room.host == request.user %}
             <div class="room__topRight">
-              <a href="#">
+              <a href="{% url "update_room" room.id %}">
                 <svg
                   enable-background="new 0 0 24 24"
                   height="32"
@@ -46,7 +47,7 @@
                   </g>
                 </svg>
               </a>
-              <a href="#">
+              <a href="{% url "delete_room" room.id %}">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                   <title>remove</title>
                   <path
@@ -55,6 +56,7 @@
                 </svg>
               </a>
             </div>
+            {% endif %}
 
             <!-- <button class="action-button" data-id="120" data-delete-url="https://randomuser.me/api/3324923"
             data-edit-url="profile.html">
@@ -76,7 +78,7 @@
             <div class="room__header scroll">
               <div class="room__info">
                 <h3>{{room.name}}</h3>
-                <span>{{room.created|timesince}} ago</span>
+                <span>{{room.created|timesince}} ago&nbsp</span>
               </div>
               <div class="room__hosted">
                 <p>Hosted By</p>
@@ -106,6 +108,8 @@
                       </a>
                       <span class="thread__date">{{message.created|timesince}}</span>
                     </div>
+                    {% if request.user == message.user %}
+                    <a href="{% url "delete_message" message.id %}">
                     <div class="thread__delete">
                       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                         <title>remove</title>
@@ -114,6 +118,8 @@
                         ></path>
                       </svg>
                     </div>
+                  </a>
+                    {% endif %}
                   </div>
                   <div class="thread__details">
                     {{message.body}}
@@ -131,7 +137,7 @@
 
         <!--   Start -->
         <div class="participants">
-          <h3 class="participants__top">Participants <span>(5.3k Joined)</span></h3>
+          <h3 class="participants__top">Participants <span>({{room.participants.all.count}})</span></h3>
           <div class="participants__list scroll">
             {% for participant in participants %}
             <a href="{% url "user_profile" participant.id %}" class="participant">
