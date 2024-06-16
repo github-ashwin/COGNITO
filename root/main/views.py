@@ -41,10 +41,10 @@ def logout_user(request):
 
 # View for registering a new user
 def registerpage(request):
-    form = CustomUserCreationForm()
+    form = MyUserCreationForm()
 
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -52,8 +52,7 @@ def registerpage(request):
             login(request, user)
             return redirect('home')
         else:
-            for error in form.errors.values():
-                messages.error(request, error)
+            messages.error(request, 'An error occurred during registration')
 
     context = {'form': form}
     return render(request, 'main/login_register.html', context)
@@ -180,18 +179,16 @@ def delete_message(request, pk):
         return redirect('home')
     return render(request, 'main/delete.html', {'obj': message})
 
-# View for editing a message
-@login_required(login_url='login')
-def edit_message(request, pk):
-    message = get_object_or_404(Message, id=pk)
 
-    if request.user != message.user:
-        return HttpResponse('You are not allowed here!')
+@login_required(login_url='login')
+def update_user(request):
+    user = request.user
+    form = UserForm(instance=user)
 
     if request.method == 'POST':
-        message.body = request.POST.get('body')
-        message.save()
-        return redirect('home')
-    
-    context = {'message': message}
-    return render(request, 'main/edit_message.html', context)
+        form =  UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile',pk=user.id)
+    context = {'form':form}
+    return render(request,'main/update_user.html',context)
