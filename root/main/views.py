@@ -192,3 +192,9 @@ def update_user(request):
             return redirect('user_profile',pk=user.id)
     context = {'form':form}
     return render(request,'main/update_user.html',context)
+
+
+def topicsPage(request):
+    topics = Topic.object.filter()
+    context = {'topics':topics}
+    return render(request,'main/topics.html')
