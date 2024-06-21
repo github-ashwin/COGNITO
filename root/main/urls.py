@@ -14,5 +14,6 @@ urlpatterns = [
     path('deleteroom/<int:pk>/',delete_room,name='delete_room'),
     path('deletemessage/<int:pk>/',delete_message,name='delete_message'),
     path('topicsPage/',topicsPage,name='topicsPage'),
+    path('activityPage/',activityPage,name='activityPage'),
     path('logout/',logout_user,name='logout')
 ]
